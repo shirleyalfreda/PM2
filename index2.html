@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawmate - Pet Care App</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 统一的 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF9F43', // 温暖橙色
+                        secondary: '#3ABFF8', // 柔和蓝色
+                        neutral: {
+                            light: '#F3F4F6',
+                            dark: '#4B5563'
+                        },
+                        success: '#10B981',
+                        warning: '#FBBF24',
+                        danger: '#EF4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-in-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+            .btn-shadow {
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            }
+            .transition-all-300 {
+                transition: all 300ms ease-in-out;
+            }
+            .bg-gradient-pawmate {
+                background: linear-gradient(135deg, #FF9F43 0%, #3ABFF8 100%);
+            }
+            .bg-pawmate-orange {
+                background-color: rgba(255, 159, 67, 0.1);
+            }
+            .bg-pawmate-blue {
+                background-color: rgba(58, 191, 248, 0.1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 背景图 -->
+    <div class="fixed inset-0 z-0 opacity-20 pointer-events-none">
+        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/738715d7fc054d72825a9acfba849ea8~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189582&x-signature=%2BWSEmAm%2FeW7Tbnn1RrKn8BTJK8k%3D" 
+             alt="Background" class="w-full h-full object-cover">
+    </div>
+
+    <!-- 页面容器 -->
+    <div class="relative z-10 min-h-screen flex flex-col">
+        <!-- 顶部状态栏 -->
+        <header id="header" class="bg-white shadow-sm py-4 px-6 sticky top-0 z-20">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/654b1a52fb9a4519b5aa43adb84f54e0~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189574&x-signature=yX%2FaEIfMN%2FuOPzD8LZlBJI98lSE%3D" 
+                         alt="Pawmate Logo" class="h-10 w-10">
+                    <h1 class="ml-2 text-xl font-bold text-gray-800">Pawmate</h1>
+                </div>
+                <div id="header-actions" class="flex items-center">
+                    <!-- 动态内容，根据页面变化 -->
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容区域 -->
+        <main class="flex-grow container mx-auto px-4 py-6">
+            <!-- 页面内容将通过JavaScript动态加载 -->
+            <div id="page-content" class="animate-fade-in">
+                <!-- 登录与角色选择页 -->
+                <div id="login-page" class="flex flex-col items-center justify-center min-h-[80vh]">
+                    <div class="text-center mb-10">
+                        <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/654b1a52fb9a4519b5aa43adb84f54e0~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189574&x-signature=yX%2FaEIfMN%2FuOPzD8LZlBJI98lSE%3D" 
+                             alt="Pawmate Logo" class="h-24 w-24 mx-auto mb-4">
+                        <h2 class="text-3xl font-bold text-gray-800">Welcome to Pawmate</h2>
+                        <p class="text-gray-600 mt-2">Your Pet Care Assistant</p>
+                    </div>
+
+                    <!-- 微信登录按钮 -->
+                    <button id="wechat-login-btn" class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-8 rounded-full btn-shadow transition-all-300 mb-8 w-full max-w-xs">
+                        <i class="fa fa-weixin text-2xl mr-3"></i>
+                        <span>Login with WeChat</span>
+                    </button>
+
+                    <!-- 角色选择卡片 -->
+                    <div class="w-full max-w-md">
+                        <h3 class="text-lg font-medium text-gray-700 mb-4 text-center">Please select your role</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- 宠物主人角色 -->
+                            <div id="owner-role" class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-all-300 cursor-pointer border-2 border-transparent hover:border-primary">
+                                <div class="flex flex-col items-center text-center">
+                                    <div class="w-16 h-16 rounded-full bg-pawmate-orange flex items-center justify-center mb-4">
+                                        <i class="fa fa-home text-primary text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-gray-800">Pet Owner</h4>
+                                    <p class="text-sm text-gray-500 mt-1">Find reliable pet caregivers</p>
+                                </div>
+                            </div>
+
+                            <!-- 照料者角色 -->
+                            <div id="caregiver-role" class="bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-all-300 cursor-pointer border-2 border-transparent hover:border-secondary">
+                                <div class="flex flex-col items-center text-center">
+                                    <div class="w-16 h-16 rounded-full bg-pawmate-blue flex items-center justify-center mb-4">
+                                        <i class="fa fa-paw text-secondary text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-gray-800">Caregiver</h4>
+                                    <p class="text-sm text-gray-500 mt-1">Provide professional pet care</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 宠物主人 - 发布需求页 -->
+                <div id="owner-demand-page" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Post a Request</h2>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Service Information</h3>
+                        
+                        <div class="space-y-4">
+                            <!-- 服务类型 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <button class="service-type-btn bg-primary bg-opacity-10 text-primary border border-primary rounded-lg py-2 px-3 text-sm font-medium">
+                                        <i class="fa fa-home mr-1"></i> Home Visit
+                                    </button>
+                                    <button class="service-type-btn bg-white text-gray-700 border border-gray-300 rounded-lg py-2 px-3 text-sm font-medium">
+                                        <i class="fa fa-car mr-1"></i> Transportation
+                                    </button>
+                                    <button class="service-type-btn bg-white text-gray-700 border border-gray-300 rounded-lg py-2 px-3 text-sm font-medium">
+                                        <i class="fa fa-hospital-o mr-1"></i> Medical Escort
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- 日期选择 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Service Date</label>
+                                <input type="date" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            
+                            <!-- 时间选择 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Service Time</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs text-gray-500 mb-1">Start Time</label>
+                                        <input type="time" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs text-gray-500 mb-1">End Time</label>
+                                        <input type="time" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 地点选择 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Service Location</label>
+                                <div class="relative">
+                                    <select class="w-full border border-gray-300 rounded-lg py-2 px-3 pl-10 appearance-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" id="city-select">
+                                        <option value="">Select City</option>
+                                        <option value="beijing">Beijing</option>
+                                        <option value="shanghai">Shanghai</option>
+                                        <option value="guangzhou">Guangzhou</option>
+                                        <option value="shenzhen">Shenzhen</option>
+                                        <option value="hangzhou">Hangzhou</option>
+                                    </select>
+                                    <i class="fa fa-map-marker absolute left-3 top-3 text-gray-400"></i>
+                                    <i class="fa fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+                                </div>
+                                <div class="mt-2 relative">
+                                    <select class="w-full border border-gray-300 rounded-lg py-2 px-3 pl-10 appearance-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" id="district-select">
+                                        <option value="">Select District</option>
+                                    </select>
+                                    <i class="fa fa-map-marker absolute left-3 top-3 text-gray-400"></i>
+                                    <i class="fa fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+                                </div>
+                                <div class="mt-2 relative">
+                                    <input type="text" placeholder="Enter detailed address" class="w-full border border-gray-300 rounded-lg py-2 px-3 pl-10 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <i class="fa fa-home absolute left-3 top-3 text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Pet Information</h3>
+                        
+                        <div class="space-y-4">
+                            <!-- 宠物类型 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Pet Type</label>
+                                <div class="grid grid-cols-4 gap-3">
+                                    <button class="pet-type-btn bg-primary bg-opacity-10 text-primary border border-primary rounded-lg py-2 px-3 text-sm font-medium">
+                                        <i class="fa fa-dog mr-1"></i> Dog
+                                    </button>
+                                    <button class="pet-type-btn bg-white text-gray-700 border border-gray-300 rounded-lg py-2 px-3 text-sm font-medium">
+                                        <i class="fa fa-cat mr-1"></i> Cat
+                                    </button>
+                                    <button class="pet-type-btn bg-white text-gray-700 border border-gray-300 rounded-lg py-2 px-3 text-sm font-medium">
+                                        <i class="fa fa-fish mr-1"></i> Fish
+                                    </button>
+                                    <button class="pet-type-btn bg-white text-gray-700 border border-gray-300 rounded-lg py-2 px-3 text-sm font-medium">
+                                        <i class="fa fa-paw mr-1"></i> Other
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- 宠物品种 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Pet Breed</label>
+                                <input type="text" placeholder="Please enter pet breed" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            
+                            <!-- 宠物年龄 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Pet Age</label>
+                                <input type="text" placeholder="Please enter pet age" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            
+                            <!-- 特殊要求 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Special Requirements</label>
+                                <textarea placeholder="Please enter special care requirements (optional)" rows="3" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="submit-demand-btn" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg btn-shadow transition-all-300">
+                        Submit Request
+                    </button>
+                </div>
+
+                <!-- 宠物主人 - 匹配与确认页 -->
+                <div id="owner-match-page" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Match with Caregivers</h2>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Your Request</h3>
+                        
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Type</p>
+                                    <p class="font-medium">Home Visit</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Date</p>
+                                    <p class="font-medium">November 10, 2025</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Time</p>
+                                    <p class="font-medium">09:00 - 18:00</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Location</p>
+                                    <p class="font-medium">88 Jianguo Road, Chaoyang District, Beijing</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Pet Type</p>
+                                    <p class="font-medium">Dog (Golden Retriever)</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Pet Age</p>
+                                    <p class="font-medium">2 years old</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Recommended Caregivers</h3>
+                    
+                    <!-- 照料者列表 -->
+                    <div class="space-y-4 mb-6">
+                        <!-- 照料者1 -->
+                        <div class="caregiver-card bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-all-300 cursor-pointer border-2 border-transparent hover:border-primary">
+                            <div class="flex items-start">
+                                <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+                                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/05c457460cfd401b97825b51ea1ccba6~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189592&x-signature=sPrjZrjgIIHyBMFCVK2QjdZjt2k%3D" 
+                                         alt="Caregiver Avatar" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-800">Li Xiaoming</h4>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star-half-o"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-500 ml-1">4.8 (120 reviews)</span>
+                                            </div>
+                                        </div>
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                            <i class="fa fa-check mr-1"></i> Verified
+                                        </span>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2 mt-2">
+                                        <div class="bg-gray-50 rounded p-2 text-sm">
+                                            <p class="text-gray-500">Service Count</p>
+                                            <p class="font-medium">200+</p>
+                                        </div>
+                                        <div class="bg-gray-50 rounded p-2 text-sm">
+                                            <p class="text-gray-500">Response Time</p>
+                                            <p class="font-medium">10 mins</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-600 line-clamp-2">
+                                            5 years of pet care experience, specializes in large dogs, holds pet care certification, provides home feeding, walking, grooming services.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-lg font-bold text-primary">¥50</span>
+                                        <span class="text-sm text-gray-500">/hour</span>
+                                    </div>
+                                    <button class="view-caregiver-btn bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg btn-shadow transition-all-300">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 照料者2 -->
+                        <div class="caregiver-card bg-white rounded-xl p-6 card-shadow hover:shadow-lg transition-all-300 cursor-pointer border-2 border-transparent hover:border-primary">
+                            <div class="flex items-start">
+                                <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+                                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/05c457460cfd401b97825b51ea1ccba6~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189592&x-signature=sPrjZrjgIIHyBMFCVK2QjdZjt2k%3D" 
+                                         alt="Caregiver Avatar" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-800">Zhang Yuqing</h4>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star-o"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-500 ml-1">4.2 (86 reviews)</span>
+                                            </div>
+                                        </div>
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                            <i class="fa fa-check mr-1"></i> Verified
+                                        </span>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2 mt-2">
+                                        <div class="bg-gray-50 rounded p-2 text-sm">
+                                            <p class="text-gray-500">Service Count</p>
+                                            <p class="font-medium">150+</p>
+                                        </div>
+                                        <div class="bg-gray-50 rounded p-2 text-sm">
+                                            <p class="text-gray-500">Response Time</p>
+                                            <p class="font-medium">15 mins</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-600 line-clamp-2">
+                                            Dog lover with 3 years of experience, especially fond of Golden Retrievers, knows basic pet care and simple training, provides home visits and walking services.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-lg font-bold text-primary">¥45</span>
+                                        <span class="text-sm text-gray-500">/hour</span>
+                                    </div>
+                                    <button class="view-caregiver-btn bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg btn-shadow transition-all-300">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 宠物主人 - 照料者详情页 -->
+                <div id="owner-caregiver-detail-page" class="hidden">
+                    <button id="back-to-match-btn" class="flex items-center text-gray-600 hover:text-primary mb-4">
+                        <i class="fa fa-arrow-left mr-2"></i>
+                        <span>Back to Matches</span>
+                    </button>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <div class="flex items-center">
+                            <div class="w-20 h-20 rounded-full overflow-hidden mr-4">
+                                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/05c457460cfd401b97825b51ea1ccba6~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189592&x-signature=sPrjZrjgIIHyBMFCVK2QjdZjt2k%3D" 
+                                     alt="Caregiver Avatar" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <div class="flex items-center">
+                                    <h3 class="text-xl font-bold text-gray-800">Li Xiaoming</h3>
+                                    <span class="ml-2 bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                        <i class="fa fa-check mr-1"></i> Verified
+                                    </span>
+                                </div>
+                                <div class="flex items-center mt-1">
+                                    <div class="flex text-yellow-400">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-half-o"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-500 ml-1">4.8 (120 reviews)</span>
+                                </div>
+                                <div class="flex items-center mt-1 text-sm text-gray-600">
+                                    <i class="fa fa-map-marker mr-1"></i>
+                                    <span>2.5 km away from you</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 mt-6">
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Service Count</p>
+                                <p class="text-lg font-semibold">200+</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Response Time</p>
+                                <p class="text-lg font-semibold">10 mins</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Service Price</p>
+                                <p class="text-lg font-semibold text-primary">¥50/hour</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">About Me</h4>
+                            <p class="text-gray-600">
+                                I am a professional pet caregiver with 5 years of experience, holding a national certified pet care qualification certificate. I especially love dogs, especially large breeds, and have rich experience in caring for Golden Retrievers. I provide professional pet care services, including feeding, walking, grooming, and cleaning, ensuring your pet receives the best care while you're away.
+                            </p>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Services</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    <i class="fa fa-cutlery mr-1"></i> Feeding
+                                </span>
+                                <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    <i class="fa fa-walking mr-1"></i> Walking
+                                </span>
+                                <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    <i class="fa fa-shower mr-1"></i> Bathing
+                                </span>
+                                <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    <i class="fa fa-scissors mr-1"></i> Grooming
+                                </span>
+                                <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    <i class="fa fa-medkit mr-1"></i> Basic Medical Care
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Pets I've Cared For</h4>
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="bg-gray-50 rounded-lg p-2 text-center">
+                                    <i class="fa fa-dog text-2xl text-gray-600"></i>
+                                    <p class="text-xs mt-1 text-gray-500">Golden</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-2 text-center">
+                                    <i class="fa fa-dog text-2xl text-gray-600"></i>
+                                    <p class="text-xs mt-1 text-gray-500">Labrador</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-2 text-center">
+                                    <i class="fa fa-dog text-2xl text-gray-600"></i>
+                                    <p class="text-xs mt-1 text-gray-500">Samoyed</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-2 text-center">
+                                    <i class="fa fa-cat text-2xl text-gray-600"></i>
+                                    <p class="text-xs mt-1 text-gray-500">Ragdoll</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Customer Reviews</h4>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-primary pl-3">
+                                    <div class="flex justify-between">
+                                        <p class="font-medium">Ms. Wang</p>
+                                        <p class="text-sm text-gray-500">October 25, 2025</p>
+                                    </div>
+                                    <div class="flex text-yellow-400 mt-1">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p class="text-gray-600 mt-1">Mr. Li took excellent care of my Golden Retriever. My dog really liked him, and he was in great spirits when I got back. He also sent me many photos and videos, which made me feel very at ease!</p>
+                                </div>
+                                <div class="border-l-4 border-primary pl-3">
+                                    <div class="flex justify-between">
+                                        <p class="font-medium">Mr. Zhang</p>
+                                        <p class="text-sm text-gray-500">October 18, 2025</p>
+                                    </div>
+                                    <div class="flex text-yellow-400 mt-1">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div>
+                                    <p class="text-gray-600 mt-1">Professional service, arrived on time, and even helped me groom my dog's fur neatly. The price is reasonable, and I will definitely find him again next time.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Additional Pet Information</h3>
+                        
+                        <div class="space-y-4">
+                            <!-- 宠物名称 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Pet Name</label>
+                                <input type="text" placeholder="Please enter pet name" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            
+                            <!-- 健康状况 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Health Condition</label>
+                                <textarea placeholder="Please describe your pet's health condition, any diseases or allergies (optional)" rows="2" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                            </div>
+                            
+                            <!-- 饮食习惯 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Eating Habits</label>
+                                <textarea placeholder="Please describe your pet's eating habits and taboos (optional)" rows="2" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                            </div>
+                            
+                            <!-- 特殊要求 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Special Requirements</label>
+                                <textarea placeholder="Please enter other special care requirements (optional)" rows="2" class="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Order Information</h3>
+                        
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Type</p>
+                                    <p class="font-medium">Home Visit</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Date</p>
+                                    <p class="font-medium">November 10, 2025</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Time</p>
+                                    <p class="font-medium">09:00 - 18:00 (9 hours)</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Location</p>
+                                    <p class="font-medium">88 Jianguo Road, Chaoyang District, Beijing</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Caregiver</p>
+                                    <p class="font-medium">Li Xiaoming</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Contact Phone</p>
+                                    <p class="font-medium">138****5678</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <p class="text-gray-700">Subtotal</p>
+                                    <p class="font-medium">¥450.00 (9 hours × ¥50/hour)</p>
+                                </div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <p class="text-gray-700">Platform Service Fee</p>
+                                    <p class="font-medium">¥45.00 (10%)</p>
+                                </div>
+                                <div class="flex justify-between items-center mt-2">
+                                    <p class="text-gray-700">Coupon</p>
+                                    <p class="font-medium text-green-600">-¥20.00</p>
+                                </div>
+                                <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
+                                    <p class="text-lg font-semibold text-gray-800">Total</p>
+                                    <p class="text-lg font-bold text-primary">¥475.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="confirm-order-btn" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg btn-shadow transition-all-300">
+                        Confirm Order and Pay
+                    </button>
+                </div>
+
+                <!-- 宠物主人 - 执行与追踪页 -->
+                <div id="owner-tracking-page" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Service Tracking</h2>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Order #P20251110001</h3>
+                                <p class="text-sm text-gray-500">November 10, 2025 09:00 - 18:00</p>
+                            </div>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                <i class="fa fa-clock-o mr-1"></i> In Progress
+                            </span>
+                        </div>
+                        
+                        <!-- 服务进度条 -->
+                        <div class="relative">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm text-gray-500">Completed</span>
+                                <span class="text-sm text-gray-500">Total Progress</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 60%"></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-medium">5 hours 36 minutes</span>
+                                <span class="text-sm font-medium">9 hours</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="text-md font-semibold text-gray-800 mb-3">Service Status</h4>
+                            
+                            <div class="relative">
+                                <!-- 时间线 -->
+                                <div class="absolute left-4 top-0 h-full w-0.5 bg-gray-200"></div>
+                                
+                                <!-- 状态点1 -->
+                                <div class="flex items-start mb-6 relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-success text-white z-10">
+                                        <i class="fa fa-check text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-800">Caregiver Arrived</h5>
+                                        <p class="text-sm text-gray-500">November 10, 2025 08:55</p>
+                                        <p class="text-sm text-gray-600 mt-1">Li Xiaoming has arrived at your address and is ready to start service</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 状态点2 -->
+                                <div class="flex items-start mb-6 relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-success text-white z-10">
+                                        <i class="fa fa-check text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-800">Service Started</h5>
+                                        <p class="text-sm text-gray-500">November 10, 2025 09:00</p>
+                                        <p class="text-sm text-gray-600 mt-1">Started taking care of your pet according to plan</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 状态点3 -->
+                                <div class="flex items-start mb-6 relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-success text-white z-10">
+                                        <i class="fa fa-check text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-800">Feeding Completed</h5>
+                                        <p class="text-sm text-gray-500">November 10, 2025 12:00</p>
+                                        <p class="text-sm text-gray-600 mt-1">Fed according to your requirements and provided fresh water</p>
+                                        
+                                        <div class="mt-2 grid grid-cols-2 gap-2">
+                                            <div class="rounded-lg overflow-hidden">
+                                                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                                     alt="Feeding Photo" class="w-full h-24 object-cover">
+                                            </div>
+                                            <div class="rounded-lg overflow-hidden">
+                                                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                                     alt="Feeding Photo" class="w-full h-24 object-cover">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 状态点4 -->
+                                <div class="flex items-start mb-6 relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white z-10">
+                                        <i class="fa fa-circle-o-notch fa-spin text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-800">Walking the Dog</h5>
+                                        <p class="text-sm text-gray-500">November 10, 2025 15:00</p>
+                                        <p class="text-sm text-gray-600 mt-1">Taking your pet for a walk, expected to return in 1 hour</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 状态点5 -->
+                                <div class="flex items-start relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-white z-10">
+                                        <i class="fa fa-hourglass-half text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-400">Service Completed</h5>
+                                        <p class="text-sm text-gray-400">Estimated November 10, 2025 18:00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Real-time Location</h3>
+                        
+                        <div class="h-64 bg-gray-100 rounded-lg mb-4 relative overflow-hidden">
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/a59d1a4573a64967a0cc76ce44c74363~tplv-a9rns2rl98-image.image?rcl=20251108183702AB90E17C726621573088&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765190256&x-signature=Ih26GxGsxp4xJRRJ7lDGyGfpFv0%3D" alt="Map" class="w-full h-full object-cover opacity-70">
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fa fa-map-marker text-white text-xl"></i>
+                            </div>
+                            <div class="absolute bottom-2 left-2 bg-white bg-opacity-90 p-2 rounded-lg text-sm">
+                                <p class="font-medium">Current Location</p>
+                                <p>Park near Jianguo Road, Chaoyang District, Beijing</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-gray-500">Last Updated</p>
+                                <p class="font-medium">5 minutes ago</p>
+                            </div>
+                            <button class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg btn-shadow transition-all-300">
+                                <i class="fa fa-refresh mr-1"></i> Refresh Location
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Contact Caregiver</h3>
+                        
+                        <div class="flex space-x-4">
+                            <button class="flex-1 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg btn-shadow transition-all-300 flex items-center justify-center">
+                                <i class="fa fa-phone mr-2"></i> Call Now
+                            </button>
+                            <button class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg btn-shadow transition-all-300 flex items-center justify-center">
+                                <i class="fa fa-comment mr-2"></i> Send Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 照料者 - 订单接收页 -->
+                <div id="caregiver-orders-page" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">New Orders</h2>
+                    
+                    <!-- 订单卡片 -->
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Home Visit Request</h3>
+                                <p class="text-sm text-gray-500 mt-1">Order #P20251110001</p>
+                            </div>
+                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                <i class="fa fa-clock-o mr-1"></i> Confirm within 30 mins
+                            </span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <p class="text-sm text-gray-500">Service Date</p>
+                                <p class="font-medium">November 10, 2025</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Service Time</p>
+                                <p class="font-medium">09:00 - 18:00 (9 hours)</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Service Location</p>
+                                <p class="font-medium">88 Jianguo Road, Chaoyang District, Beijing</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Distance</p>
+                                <p class="font-medium">2.5 km</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <h4 class="text-md font-semibold text-gray-800 mb-2">Pet Information</h4>
+                            
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full overflow-hidden mr-3">
+                                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                         alt="Pet Photo" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <p class="font-medium">Golden Retriever</p>
+                                    <p class="text-sm text-gray-500">2 years old, Male</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <h4 class="text-md font-semibold text-gray-800 mb-2">Special Requirements</h4>
+                            <p class="text-gray-600">
+                                The dog has a gentle temperament and needs to be walked twice a day, 30 minutes each time. Feed at noon 12 o'clock according to the provided dog food and portion. The dog is allergic to chicken, please do not feed any food containing chicken ingredients.
+                            </p>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm text-gray-500">Service Fee</p>
+                                    <p class="text-lg font-bold text-primary">¥450.00 (9 hours × ¥50/hour)</p>
+                                </div>
+                                <div class="flex space-x-3">
+                                    <button class="reject-order-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg btn-shadow transition-all-300">
+                                        Reject
+                                    </button>
+                                    <button class="accept-order-btn bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg btn-shadow transition-all-300">
+                                        Accept
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">More Orders</h3>
+                    
+                    <!-- 更多订单列表 -->
+                    <div class="space-y-4">
+                        <!-- 订单1 -->
+                        <div class="bg-white rounded-xl p-4 card-shadow hover:shadow-lg transition-all-300 cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Home Visit Request</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Order #P20251110002</p>
+                                </div>
+                                <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                    <i class="fa fa-clock-o mr-1"></i> Confirm within 25 mins
+                                </span>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-2 mt-2 text-xs">
+                                <div>
+                                    <p class="text-gray-500">Date</p>
+                                    <p class="font-medium">2025-11-11</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Time</p>
+                                    <p class="font-medium">10:00-16:00</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Location</p>
+                                    <p class="font-medium">3.2 km</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center mt-2">
+                                <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+                                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                         alt="Pet Photo" class="w-full h-full object-cover">
+                                </div>
+                                <div class="text-xs">
+                                    <p class="font-medium">Ragdoll Cat, 1 year</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-2 pt-2 border-t border-gray-100 flex justify-between items-center">
+                                <p class="text-sm font-bold text-primary">¥300.00</p>
+                                <button class="text-primary hover:text-primary/80 text-sm font-medium">
+                                    View Details <i class="fa fa-angle-right ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 订单2 -->
+                        <div class="bg-white rounded-xl p-4 card-shadow hover:shadow-lg transition-all-300 cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Transportation Request</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Order #P20251110003</p>
+                                </div>
+                                <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                    <i class="fa fa-clock-o mr-1"></i> Confirm within 40 mins
+                                </span>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-2 mt-2 text-xs">
+                                <div>
+                                    <p class="text-gray-500">Date</p>
+                                    <p class="font-medium">2025-11-12</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Time</p>
+                                    <p class="font-medium">14:00-15:00</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500">Location</p>
+                                    <p class="font-medium">5.8 km</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center mt-2">
+                                <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+                                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                         alt="Pet Photo" class="w-full h-full object-cover">
+                                </div>
+                                <div class="text-xs">
+                                    <p class="font-medium">Samoyed, 3 years</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-2 pt-2 border-t border-gray-100 flex justify-between items-center">
+                                <p class="text-sm font-bold text-primary">¥120.00</p>
+                                <button class="text-primary hover:text-primary/80 text-sm font-medium">
+                                    View Details <i class="fa fa-angle-right ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 照料者 - 服务中订单页 -->
+                <div id="caregiver-service-page" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">In Service</h2>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Order #P20251110001</h3>
+                                <p class="text-sm text-gray-500">November 10, 2025 09:00 - 18:00</p>
+                            </div>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                <i class="fa fa-clock-o mr-1"></i> In Progress
+                            </span>
+                        </div>
+                        
+                        <!-- 服务进度条 -->
+                        <div class="relative">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm text-gray-500">Completed</span>
+                                <span class="text-sm text-gray-500">Total Progress</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 60%"></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-medium">5 hours 36 minutes</span>
+                                <span class="text-sm font-medium">9 hours</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="text-md font-semibold text-gray-800 mb-3">Service Status</h4>
+                            
+                            <div class="relative">
+                                <!-- 时间线 -->
+                                <div class="absolute left-4 top-0 h-full w-0.5 bg-gray-200"></div>
+                                
+                                <!-- 状态点1 -->
+                                <div class="flex items-start mb-6 relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-success text-white z-10">
+                                        <i class="fa fa-check text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-800">Arrived</h5>
+                                        <p class="text-sm text-gray-500">November 10, 2025 08:55</p>
+                                        <p class="text-sm text-gray-600 mt-1">Arrived at customer's address</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 状态点2 -->
+                                <div class="flex items-start mb-6 relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-success text-white z-10">
+                                        <i class="fa fa-check text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-800">Service Started</h5>
+                                        <p class="text-sm text-gray-500">November 10, 2025 09:00</p>
+                                        <p class="text-sm text-gray-600 mt-1">Started taking care of the pet according to plan</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 状态点3 -->
+                                <div class="flex items-start mb-6 relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-success text-white z-10">
+                                        <i class="fa fa-check text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-800">Feeding Completed</h5>
+                                        <p class="text-sm text-gray-500">November 10, 2025 12:00</p>
+                                        <p class="text-sm text-gray-600 mt-1">Fed according to requirements and provided fresh water</p>
+                                        
+                                        <div class="mt-2 grid grid-cols-2 gap-2">
+                                            <div class="rounded-lg overflow-hidden">
+                                                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                                     alt="Feeding Photo" class="w-full h-24 object-cover">
+                                            </div>
+                                            <div class="rounded-lg overflow-hidden">
+                                                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                                     alt="Feeding Photo" class="w-full h-24 object-cover">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 状态点4 -->
+                                <div class="flex items-start mb-6 relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white z-10">
+                                        <i class="fa fa-circle-o-notch fa-spin text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-800">Walking the Dog</h5>
+                                        <p class="text-sm text-gray-500">November 10, 2025 15:00</p>
+                                        <p class="text-sm text-gray-600 mt-1">Taking the pet for a walk, expected to return in 1 hour</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 状态点5 -->
+                                <div class="flex items-start relative">
+                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-white z-10">
+                                        <i class="fa fa-hourglass-half text-sm"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h5 class="text-md font-medium text-gray-400">Complete Service</h5>
+                                        <p class="text-sm text-gray-400">Estimated November 10, 2025 18:00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Pet Information</h3>
+                        
+                        <div class="flex items-center mb-4">
+                            <div class="w-16 h-16 rounded-full overflow-hidden mr-4">
+                                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                     alt="Pet Photo" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Xiao Jin</h4>
+                                <p class="text-sm text-gray-500">Golden Retriever, 2 years old, Male</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-sm text-gray-500">Health Condition</p>
+                                <p class="text-gray-700">Healthy, no medical history</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Eating Habits</p>
+                                <p class="text-gray-700">Two meals a day, one cup of dog food each time, do not feed human food</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Special Requirements</p>
+                                <p class="text-gray-700">The dog is allergic to chicken, please do not feed any food containing chicken ingredients. When walking, please use the provided leash and do not let the dog out of sight.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Upload Service Photos</h3>
+                        
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <i class="fa fa-cloud-upload text-3xl text-gray-400 mb-2"></i>
+                            <p class="text-gray-500 mb-4">Click or drag photos here to upload</p>
+                            <button class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg btn-shadow transition-all-300">
+                                Select Photos
+                            </button>
+                        </div>
+                        
+                        <p class="text-xs text-gray-500 mt-2">Uploading photos can make pet owners more at ease. It is recommended to upload once after completing each service</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Contact Pet Owner</h3>
+                        
+                        <div class="flex space-x-4">
+                            <button class="flex-1 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg btn-shadow transition-all-300 flex items-center justify-center">
+                                <i class="fa fa-phone mr-2"></i> Call Now
+                            </button>
+                            <button class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg btn-shadow transition-all-300 flex items-center justify-center">
+                                <i class="fa fa-comment mr-2"></i> Send Message
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button id="complete-service-btn" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg btn-shadow transition-all-300">
+                        Complete Service
+                    </button>
+                </div>
+                
+                <!-- 宠物主人 - 个人中心页 -->
+                <div id="owner-profile-page" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">My Profile</h2>
+                    
+                    <!-- 个人信息卡片 -->
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <div class="flex items-center">
+                            <div class="w-20 h-20 rounded-full overflow-hidden mr-4">
+                                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/05c457460cfd401b97825b51ea1ccba6~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189592&x-signature=sPrjZrjgIIHyBMFCVK2QjdZjt2k%3D" 
+                                     alt="User Avatar" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-xl font-bold text-gray-800">Wang Xiaoming</h3>
+                                    <button class="text-primary hover:text-primary/80">
+                                        <i class="fa fa-pencil mr-1"></i> Edit
+                                    </button>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">138****5678 | Chaoyang District, Beijing</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                        <i class="fa fa-check mr-1"></i> Verified
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 mt-6">
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Total Orders</p>
+                                <p class="text-lg font-semibold">12</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Pending Payment</p>
+                                <p class="text-lg font-semibold">1</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Coupons</p>
+                                <p class="text-lg font-semibold text-primary">3</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 功能菜单 -->
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">My Pets</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full overflow-hidden mr-3">
+                                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                             alt="Pet Photo" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">Xiao Jin</p>
+                                        <p class="text-xs text-gray-500">Golden Retriever | 2 years</p>
+                                    </div>
+                                </div>
+                                <button class="text-primary hover:text-primary/80">
+                                    <i class="fa fa-angle-right"></i>
+                                </button>
+                            </div>
+                            
+                            <button class="flex items-center justify-center w-full p-3 border border-dashed border-gray-300 rounded-lg text-gray-500 hover:text-primary hover:border-primary transition-all-300">
+                                <i class="fa fa-plus-circle mr-2"></i> Add Pet
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">My Orders</h3>
+                        
+                        <div class="grid grid-cols-4 gap-2 mb-4">
+                            <button class="order-tab-btn bg-primary bg-opacity-10 text-primary border border-primary rounded-lg py-2 px-3 text-sm font-medium">
+                                All
+                            </button>
+                            <button class="order-tab-btn bg-white text-gray-700 border border-gray-300 rounded-lg py-2 px-3 text-sm font-medium">
+                                Pending
+                            </button>
+                            <button class="order-tab-btn bg-white text-gray-700 border border-gray-300 rounded-lg py-2 px-3 text-sm font-medium">
+                                In Progress
+                            </button>
+                            <button class="order-tab-btn bg-white text-gray-700 border border-gray-300 rounded-lg py-2 px-3 text-sm font-medium">
+                                Completed
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- 订单1 -->
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Home Visit Service</h4>
+                                        <p class="text-xs text-gray-500 mt-1">Order #P20251110001</p>
+                                    </div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                        In Progress
+                                    </span>
+                                </div>
+                                
+                                <div class="flex items-center mt-3">
+                                    <div class="w-10 h-10 rounded-full overflow-hidden mr-3">
+                                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/05c457460cfd401b97825b51ea1ccba6~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189592&x-signature=sPrjZrjgIIHyBMFCVK2QjdZjt2k%3D" 
+                                             alt="Caregiver Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Li Xiaoming</p>
+                                        <p class="text-xs text-gray-500">November 10, 2025 09:00-18:00</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
+                                    <p class="text-sm font-bold text-gray-800">¥475.00</p>
+                                    <button class="bg-primary hover:bg-primary/90 text-white font-medium py-1.5 px-3 rounded-lg btn-shadow transition-all-300 text-sm">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- 订单2 -->
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Home Visit Service</h4>
+                                        <p class="text-xs text-gray-500 mt-1">Order #P20251025001</p>
+                                    </div>
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                        Completed
+                                    </span>
+                                </div>
+                                
+                                <div class="flex items-center mt-3">
+                                    <div class="w-10 h-10 rounded-full overflow-hidden mr-3">
+                                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/05c457460cfd401b97825b51ea1ccba6~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189592&x-signature=sPrjZrjgIIHyBMFCVK2QjdZjt2k%3D" 
+                                             alt="Caregiver Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Zhang Yuqing</p>
+                                        <p class="text-xs text-gray-500">October 25, 2025 10:00-16:00</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
+                                    <p class="text-sm font-bold text-gray-800">¥320.00</p>
+                                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-1.5 px-3 rounded-lg btn-shadow transition-all-300 text-sm">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 系统设置 -->
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">System Settings</h3>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-bell text-primary"></i>
+                                    </div>
+                                    <span>Notification Settings</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-credit-card text-primary"></i>
+                                    </div>
+                                    <span>Payment Management</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-shield text-primary"></i>
+                                    </div>
+                                    <span>Privacy Settings</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-question-circle text-primary"></i>
+                                    </div>
+                                    <span>Help Center</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-cog text-primary"></i>
+                                    </div>
+                                    <span>General Settings</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg btn-shadow transition-all-300 mb-8">
+                        Logout
+                    </button>
+                </div>
+                
+                <!-- 照料者 - 个人中心页 -->
+                <div id="caregiver-profile-page" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">My Profile</h2>
+                    
+                    <!-- 个人信息卡片 -->
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <div class="flex items-center">
+                            <div class="w-20 h-20 rounded-full overflow-hidden mr-4">
+                                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/05c457460cfd401b97825b51ea1ccba6~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189592&x-signature=sPrjZrjgIIHyBMFCVK2QjdZjt2k%3D" 
+                                     alt="User Avatar" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-xl font-bold text-gray-800">Li Xiaoming</h3>
+                                    <button class="text-secondary hover:text-secondary/80">
+                                        <i class="fa fa-pencil mr-1"></i> Edit
+                                    </button>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">139****1234 | Chaoyang District, Beijing</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded mr-2">
+                                        <i class="fa fa-check mr-1"></i> Verified
+                                    </span>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                        <i class="fa fa-star mr-1"></i> Premium Caregiver
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 mt-6">
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Service Count</p>
+                                <p class="text-lg font-semibold">200+</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Rating</p>
+                                <p class="text-lg font-semibold text-yellow-400">4.8</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 text-center">
+                                <p class="text-sm text-gray-500">Earnings</p>
+                                <p class="text-lg font-semibold text-secondary">¥12,580</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 我的课程 -->
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">My Courses</h3>
+                            <a href="#" class="text-secondary hover:text-secondary/80 text-sm">View All</a>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- 课程1 -->
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <div class="w-16 h-16 rounded-lg overflow-hidden mr-3 flex-shrink-0">
+                                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                         alt="Course Cover" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow">
+                                    <h4 class="font-medium">Pet First Aid and Care</h4>
+                                    <div class="flex items-center mt-1">
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                            Completed
+                                        </span>
+                                        <p class="text-xs text-gray-500 ml-2">8 lessons | Certificate obtained</p>
+                                    </div>
+                                </div>
+                                <button class="text-secondary hover:text-secondary/80">
+                                    <i class="fa fa-certificate text-xl"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- 课程2 -->
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <div class="w-16 h-16 rounded-lg overflow-hidden mr-3 flex-shrink-0">
+                                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                         alt="Course Cover" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow">
+                                    <h4 class="font-medium">Dog Behavior Basics</h4>
+                                    <div class="flex items-center mt-1">
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                            In Progress
+                                        </span>
+                                        <p class="text-xs text-gray-500 ml-2">12 lessons | 5 completed</p>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                                        <div class="bg-secondary h-1.5 rounded-full" style="width: 42%"></div>
+                                    </div>
+                                </div>
+                                <button class="bg-secondary hover:bg-secondary/90 text-white font-medium py-1.5 px-3 rounded-lg btn-shadow transition-all-300 text-sm">
+                                    Continue Learning
+                                </button>
+                            </div>
+                            
+                            <!-- 推荐课程 -->
+                            <div class="border border-dashed border-gray-300 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-800 mb-3">Recommended Courses</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="bg-white rounded-lg overflow-hidden shadow-sm">
+                                        <div class="h-24 overflow-hidden">
+                                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                                 alt="Course Cover" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="p-2">
+                                            <h5 class="text-sm font-medium line-clamp-2">Cat Health Care Guide</h5>
+                                            <p class="text-xs text-gray-500 mt-1">6 lessons | Free</p>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white rounded-lg overflow-hidden shadow-sm">
+                                        <div class="h-24 overflow-hidden">
+                                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2db2d4b9abb14125b9ef19b0a10b3443~tplv-a9rns2rl98-image.image?rcl=20251108182600DB7C2DF9AE24BC56492D&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765189605&x-signature=VTZ0ZomqLblCMoXDMFlvCgOmEpk%3D" 
+                                                 alt="Course Cover" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="p-2">
+                                            <h5 class="text-sm font-medium line-clamp-2">Pet Nutrition Basics</h5>
+                                            <p class="text-xs text-gray-500 mt-1">10 lessons | ¥99</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 服务管理 -->
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Service Management</h3>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-calendar-check-o text-secondary"></i>
+                                    </div>
+                                    <span>My Schedule</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-money text-secondary"></i>
+                                    </div>
+                                    <span>Earnings Management</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-certificate text-secondary"></i>
+                                    </div>
+                                    <span>My Certificates</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-comments text-secondary"></i>
+                                    </div>
+                                    <span>Customer Reviews</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 系统设置 -->
+                    <div class="bg-white rounded-xl p-6 card-shadow mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">System Settings</h3>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-bell text-secondary"></i>
+                                    </div>
+                                    <span>Notification Settings</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-shield text-secondary"></i>
+                                    </div>
+                                    <span>Privacy Settings</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-question-circle text-secondary"></i>
+                                    </div>
+                                    <span>Help Center</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all-300 cursor-pointer">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary bg-opacity-10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-cog text-secondary"></i>
+                                    </div>
+                                    <span>General Settings</span>
+                                </div>
+                                <i class="fa fa-angle-right text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg btn-shadow transition-all-300 mb-8">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部导航栏 -->
+        <nav id="bottom-nav" class="bg-white shadow-lg fixed bottom-0 left-0 right-0 z-20 hidden">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-around">
+                    <!-- 导航项将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 城市和地区数据
+        const cityDistrictData = {
+            'beijing': [
+                'Chaoyang District',
+                'Haidian District',
+                'Dongcheng District',
+                'Xicheng District',
+                'Fengtai District',
+                'Shijingshan District'
+            ],
+            'shanghai': [
+                'Pudong New Area',
+                'Jing\'an District',
+                'Xuhui District',
+                'Changning District',
+                'Putuo District',
+                'Hongkou District'
+            ],
+            'guangzhou': [
+                'Tianhe District',
+                'Haizhu District',
+                'Yuexiu District',
+                'Liwan District',
+                'Baiyun District',
+                'Huangpu District'
+            ],
+            'shenzhen': [
+                'Nanshan District',
+                'Futian District',
+                'Luohu District',
+                'Yantian District',
+                'Bao\'an District',
+                'Longgang District'
+            ],
+            'hangzhou': [
+                'Xihu District',
+                'Gongshu District',
+                'Shangcheng District',
+                'Jianggan District',
+                'Binjiang District',
+                'Xiaoshan District'
+            ]
+        };
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面路由
+            const pages = {
+                'login': document.getElementById('login-page'),
+                'owner-demand': document.getElementById('owner-demand-page'),
+                'owner-match': document.getElementById('owner-match-page'),
+                'owner-caregiver-detail': document.getElementById('owner-caregiver-detail-page'),
+                'owner-tracking': document.getElementById('owner-tracking-page'),
+                'owner-profile': document.getElementById('owner-profile-page'),
+                'caregiver-orders': document.getElementById('caregiver-orders-page'),
+                'caregiver-service': document.getElementById('caregiver-service-page'),
+                'caregiver-profile': document.getElementById('caregiver-profile-page')
+            };
+            
+            // 显示指定页面，隐藏其他页面
+            function showPage(pageId) {
+                // 隐藏所有页面
+                Object.values(pages).forEach(page => {
+                    if (page) page.classList.add('hidden');
+                });
+                
+                // 显示指定页面
+                if (pages[pageId]) {
+                    pages[pageId].classList.remove('hidden');
+                }
+                
+                // 更新URL
+                window.location.hash = pageId;
+                
+                // 更新底部导航栏
+                updateBottomNav(pageId);
+                
+                // 更新顶部状态栏
+                updateHeader(pageId);
+            }
+            
+            // 更新底部导航栏
+            function updateBottomNav(pageId) {
+                const bottomNav = document.getElementById('bottom-nav');
+                const navItemsContainer = bottomNav.querySelector('.flex');
+                
+                // 清空导航项
+                navItemsContainer.innerHTML = '';
+                
+                // 根据页面ID显示不同的导航栏
+                if (pageId.startsWith('owner-')) {
+                    // 宠物主人导航栏
+                    const ownerNavItems = [
+                        { id: 'owner-demand', icon: 'fa-plus-circle', text: 'Post Request' },
+                        { id: 'owner-match', icon: 'fa-list-alt', text: 'My Orders' },
+                        { id: 'owner-tracking', icon: 'fa-map-marker', text: 'Tracking' },
+                        { id: 'owner-profile', icon: 'fa-user', text: 'Profile' }
+                    ];
+                    
+                    ownerNavItems.forEach(item => {
+                        const navItem = document.createElement('div');
+                        navItem.className = `flex flex-col items-center py-2 px-4 ${pageId === item.id ? 'text-primary' : 'text-gray-500'}`;
+                        navItem.innerHTML = `
+                            <i class="fa ${item.icon} text-xl"></i>
+                            <span class="text-xs mt-1">${item.text}</span>
+                        `;
+                        navItem.addEventListener('click', () => showPage(item.id));
+                        navItemsContainer.appendChild(navItem);
+                    });
+                    
+                    bottomNav.classList.remove('hidden');
+                } else if (pageId.startsWith('caregiver-')) {
+                    // 照料者导航栏
+                    const caregiverNavItems = [
+                        { id: 'caregiver-orders', icon: 'fa-bell', text: 'New Orders' },
+                        { id: 'caregiver-service', icon: 'fa-clock-o', text: 'In Service' },
+                        { id: 'caregiver-history', icon: 'fa-history', text: 'History' },
+                        { id: 'caregiver-profile', icon: 'fa-user', text: 'Profile' }
+                    ];
+                    
+                    caregiverNavItems.forEach(item => {
+                        const navItem = document.createElement('div');
+                        navItem.className = `flex flex-col items-center py-2 px-4 ${pageId === item.id ? 'text-secondary' : 'text-gray-500'}`;
+                        navItem.innerHTML = `
+                            <i class="fa ${item.icon} text-xl"></i>
+                            <span class="text-xs mt-1">${item.text}</span>
+                        `;
+                        navItem.addEventListener('click', () => showPage(item.id));
+                        navItemsContainer.appendChild(navItem);
+                    });
+                    
+                    bottomNav.classList.remove('hidden');
+                } else {
+                    // 登录页面隐藏导航栏
+                    bottomNav.classList.add('hidden');
+                }
+            }
+            
+            // 更新顶部状态栏
+            function updateHeader(pageId) {
+                const headerActions = document.getElementById('header-actions');
+                
+                // 清空头部操作
+                headerActions.innerHTML = '';
+                
+                // 根据页面ID显示不同的头部操作
+                if (pageId === 'login') {
+                    // 登录页面不显示头部操作
+                } else if (pageId.startsWith('owner-')) {
+                    // 宠物主人头部操作
+                    const helpBtn = document.createElement('button');
+                    helpBtn.className = 'text-gray-600 hover:text-primary';
+                    helpBtn.innerHTML = '<i class="fa fa-question-circle text-xl"></i>';
+                    headerActions.appendChild(helpBtn);
+                } else if (pageId.startsWith('caregiver-')) {
+                    // 照料者头部操作
+                    const settingsBtn = document.createElement('button');
+                    settingsBtn.className = 'text-gray-600 hover:text-secondary';
+                    settingsBtn.innerHTML = '<i class="fa fa-cog text-xl"></i>';
+                    headerActions.appendChild(settingsBtn);
+                }
+            }
+            
+            // 微信登录按钮点击事件
+            document.getElementById('wechat-login-btn').addEventListener('click', function() {
+                // 模拟微信登录
+                alert('WeChat login successful!');
+            });
+            
+            // 角色选择点击事件
+            document.getElementById('owner-role').addEventListener('click', function() {
+                showPage('owner-demand');
+            });
+            
+            document.getElementById('caregiver-role').addEventListener('click', function() {
+                showPage('caregiver-orders');
+            });
+            
+            // 提交需求按钮点击事件
+            document.getElementById('submit-demand-btn').addEventListener('click', function() {
+                showPage('owner-match');
+            });
+            
+            // 返回匹配列表按钮点击事件
+            document.getElementById('back-to-match-btn').addEventListener('click', function() {
+                showPage('owner-match');
+            });
+            
+            // 查看照料者详情按钮点击事件
+            document.querySelectorAll('.view-caregiver-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showPage('owner-caregiver-detail');
+                });
+            });
+            
+            // 确认订单按钮点击事件
+            document.getElementById('confirm-order-btn').addEventListener('click', function() {
+                showPage('owner-tracking');
+            });
+            
+            // 接受订单按钮点击事件
+            document.querySelector('.accept-order-btn').addEventListener('click', function() {
+                showPage('caregiver-service');
+            });
+            
+            // 拒绝订单按钮点击事件
+            document.querySelector('.reject-order-btn').addEventListener('click', function() {
+                alert('Order rejected');
+            });
+            
+            // 完成服务按钮点击事件
+            document.getElementById('complete-service-btn').addEventListener('click', function() {
+                alert('Service completed, please upload service photos and wait for payment');
+            });
+            
+            // 订单标签切换点击事件
+            document.querySelectorAll('.order-tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的选中状态
+                    document.querySelectorAll('.order-tab-btn').forEach(b => {
+                        b.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border-primary');
+                        b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+                    });
+                    
+                    // 设置当前按钮为选中状态
+                    this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+                    this.classList.add('bg-primary', 'bg-opacity-10', 'text-primary', 'border-primary');
+                });
+            });
+            
+            // 退出登录按钮点击事件
+            const logoutBtns = document.querySelectorAll('button.bg-gray-200.hover\\:bg-gray-300.text-gray-800');
+            logoutBtns.forEach(btn => {
+                if (btn.textContent.trim() === 'Logout') {
+                    btn.addEventListener('click', function() {
+                        if (confirm('Are you sure you want to logout?')) {
+                            showPage('login');
+                        }
+                    });
+                }
+            });
+            
+            // 服务类型按钮点击事件
+            document.querySelectorAll('.service-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的选中状态
+                    document.querySelectorAll('.service-type-btn').forEach(b => {
+                        b.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border-primary');
+                        b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+                    });
+                    
+                    // 设置当前按钮为选中状态
+                    this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+                    this.classList.add('bg-primary', 'bg-opacity-10', 'text-primary', 'border-primary');
+                });
+            });
+            
+            // 宠物类型按钮点击事件
+            document.querySelectorAll('.pet-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的选中状态
+                    document.querySelectorAll('.pet-type-btn').forEach(b => {
+                        b.classList.remove('bg-primary', 'bg-opacity-10', 'text-primary', 'border-primary');
+                        b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+                    });
+                    
+                    // 设置当前按钮为选中状态
+                    this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+                    this.classList.add('bg-primary', 'bg-opacity-10', 'text-primary', 'border-primary');
+                });
+            });
+            
+            // 照料者卡片点击事件
+            document.querySelectorAll('.caregiver-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    showPage('owner-caregiver-detail');
+                });
+            });
+            
+            // 根据URL hash显示对应页面
+            function initPageFromHash() {
+                const hash = window.location.hash.substring(1) || 'login';
+                showPage(hash);
+            }
+            
+            // 初始化页面
+            initPageFromHash();
+            
+            // 城市和地区选择逻辑
+            const citySelect = document.getElementById('city-select');
+            const districtSelect = document.getElementById('district-select');
+            
+            if (citySelect && districtSelect) {
+                citySelect.addEventListener('change', function() {
+                    const selectedCity = this.value;
+                    
+                    // 清空地区选择器
+                    districtSelect.innerHTML = '<option value="">Select District</option>';
+                    
+                    // 如果选择了城市，添加对应的地区选项
+                    if (selectedCity && cityDistrictData[selectedCity]) {
+                        cityDistrictData[selectedCity].forEach(district => {
+                            const option = document.createElement('option');
+                            option.value = district.toLowerCase().replace(' ', '-');
+                            option.textContent = district;
+                            districtSelect.appendChild(option);
+                        });
+                    }
+                });
+            }
+            
+            // 监听URL hash变化
+            window.addEventListener('hashchange', initPageFromHash);
+        });
+    </script>
+</body>
+</html>
